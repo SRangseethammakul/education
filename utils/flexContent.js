@@ -186,7 +186,7 @@ let GoToRegister = {
           action: {
             type: "uri",
             label: "Register",
-            uri: `https://liff.line.me/1657505376-o1qQe53D`,
+            uri: `https://liff.line.me/1657505544-XK1wGqPP`,
           },
           color: "#FDD919",
         },
