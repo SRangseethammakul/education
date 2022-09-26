@@ -61,8 +61,8 @@ const cardOfExam = (item) => {
                     type: "button",
                     action: {
                       type: "postback",
-                      label: "Quick Test",
-                      displayText: "Quick Test",
+                      label: "Quiz Test",
+                      displayText: "Quiz Test",
                       data: `typeQuickTest${UNIQUE_KEYWORD.QUICK_TEST}${item._id}`,
                     },
                     style: "primary",

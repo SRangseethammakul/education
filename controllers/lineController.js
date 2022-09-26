@@ -3,8 +3,16 @@ const State = require("../models/state");
 const Student = require("../models/student");
 const Question = require("../models/question");
 
-const { cardOfQuestion, GoToRegister } = require("../utils/flexContent");
-const { LinePush, LineReply } = require("../functions/lineFunction");
+const {
+  cardOfQuestion,
+  GoToRegister,
+  cardOfExam,
+} = require("../utils/flexContent");
+const {
+  LinePush,
+  LineReply,
+  lineBrordcast,
+} = require("../functions/lineFunction");
 const { lineMessageTemplateContent } = require("../utils/lineTemplate");
 const {
   LINE_TYPE_POSTBACK,
@@ -73,7 +81,18 @@ exports.webhook = async (req, res, next) => {
       const student = await Student.findOne()
         .where("lineUserId")
         .eq(source.userId);
-
+      if ("U8283ad5c2394c9a63296c94ee6230d56" === source.userId) {
+        const { type: messageType, text } = message;
+        if (messageType === "text" && text === "education") {
+          const examOutbound = await Exam.findById(id);
+          let contentOutbound = cardOfExam(examOutbound);
+          contentOutbound = lineMessageTemplateContent(
+            contentOutbound.content,
+            contentOutbound.type
+          );
+          await lineBrordcast(contentOutbound);
+        }
+      }
       if (!student) {
         let contentRegister = GoToRegister;
         contentRegister = lineMessageTemplateContent(
@@ -125,6 +144,11 @@ exports.webhook = async (req, res, next) => {
                 }
               }
               if (!tempquestions.length) {
+                contentRegister = lineMessageTemplateContent(
+                  "คุณทำข้อสอบเสร็จแล้ว",
+                  1
+                );
+                await LineReply(replyToken, contentRegister);
                 console.log("tempquestions 2", tempquestions);
                 console.log("studentState ", studentState);
                 res.status(200);
