@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Education demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  </head>
+  <body>
+    <h1>Hello, world!</h1>
+    <div class="container">
+      <div class="mb-3">
+        <label for="name" class="form-label">name</label>
+        <input type="text" class="form-control" id="name" placeholder="name">
+      </div>
+      <div class="mb-3">
+        <label for="lastName" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="lastName" placeholder="lastName">
+      </div>
+      <div class="mb-3">
+        <label for="studentId" class="form-label">Student Id</label>
+        <input type="text" class="form-control" id="studentId" placeholder="Student Id">
+      </div>
+      <div class="mb-3">
+        <label for="studentClass" class="form-label">Student Class</label>
+        <input type="text" class="form-control" id="studentClass" placeholder="Student Class">
+      </div>
+      <div class="col-auto">
+        <button type="submit" id="registerConfirm" class="btn btn-primary mb-3">Confirm Register</button>
+      </div>
+    </div>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script>
+      const register = async (event) => {
+        event.preventDefault()
+        const lineProfile = await liff.getProfile()
+        const name = document.getElementById("name").value
+        const lastName = document.getElementById("lastName").value
+        const studentId = document.getElementById("studentId").value
+        const studentClass = document.getElementById("studentClass").value
+        if(!lineProfile){
+          liff.login()
+        }
+        if(!name){
+          alert("name")
+          return 0;
+        }
+        if(!lastName){
+          alert("lastName")
+          return 0;
+        }        
+        if(!studentId){
+          alert("studentId")
+          return 0;
+        }        
+        if(!studentClass){
+          alert("studentClass")
+          return 0;
+        }
+        axios.post(`/student`, {
+          name,
+          lastName,
+          studentId,
+          studentClass,
+          lineUserId:lineProfile.userId,
+          lineProfile:lineProfile.pictureUrl,
+        })
+        .then(function (response) {
+          liff.closeWindow()
+          return 1;
+        })
+        .catch(function (error) {
+          liff.closeWindow()
+          console.log(error);
+        });
+
+      }
+      async function main() {
+        liff.ready.then(() => {
+          if (!liff.isLoggedIn()) {
+            getUserProfile()
+          } 
+        })
+        await liff.init({ liffId: "1657505376-o1qQe53D" })
+        const registerConfirm = document.getElementById("registerConfirm")
+        registerConfirm.addEventListener("click", register)
+      }
+      main()
+    </script>
+  </body>
+</html>
