@@ -84,7 +84,7 @@ exports.webhook = async (req, res, next) => {
       if ("U8283ad5c2394c9a63296c94ee6230d56" === source.userId) {
         const { type: messageType, text } = message;
         if (messageType === "text" && text === "education") {
-          const examOutbound = await Exam.findById(id);
+          const examOutbound = await Exam.findById("6331ffcacbd2f247e9b773f6");
           let contentOutbound = cardOfExam(examOutbound);
           contentOutbound = lineMessageTemplateContent(
             contentOutbound.content,
