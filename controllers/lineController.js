@@ -81,7 +81,10 @@ exports.webhook = async (req, res, next) => {
       const student = await Student.findOne()
         .where("lineUserId")
         .eq(source.userId);
-      if ("U8283ad5c2394c9a63296c94ee6230d56" === source.userId) {
+      if (
+        "U8283ad5c2394c9a63296c94ee6230d56" === source.userId &&
+        type === "message"
+      ) {
         const { type: messageType, text } = message;
         if (messageType === "text" && text === "education") {
           const examOutbound = await Exam.findById("6331ffcacbd2f247e9b773f6");
